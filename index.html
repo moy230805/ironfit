@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iron Fit - Login</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-left">
+            <h1>IRON FIT</h1>
+            <p>Tú mejor opción</p>
+        </div>
+
+        <div class="login-right">
+            <div class="login-form">
+                <h2>Iniciar Sesion</h2>
+                <p class="subtitle">Ingresa tus datos para continuar</p>
+
+                <form id="formLogin" onsubmit="return iniciarSesion(event)">
+                    <div class="form-group">
+                        <label>Correo electronico</label>
+                        <input type="email" id="loginEmail" placeholder="tu@correo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" id="loginPassword" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Entrar</button>
+                    <p class="login-error" id="loginError">Correo o contraseña incorrectos</p>
+                </form>
+
+                
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script>
+        function iniciarSesion(e) {
+            e.preventDefault();
+
+            var email = document.getElementById("loginEmail").value;
+            var password = document.getElementById("loginPassword").value;
+
+            var usuarios = obtenerDatos("usuarios");
+            var usuario = null;
+
+            for (var i = 0; i < usuarios.length; i++) {
+                if (usuarios[i].email === email && usuarios[i].password === password && usuarios[i].activo === 1) {
+                    usuario = usuarios[i];
+                    break;
+                }
+            }
+
+            if (usuario) {
+                // Guardar sesion
+                sessionStorage.setItem("ironfit_session", JSON.stringify(usuario));
+                window.location.href = "pages/dashboard.html";
+            } else {
+                document.getElementById("loginError").style.display = "block";
+                setTimeout(function() {
+                    document.getElementById("loginError").style.display = "none";
+                }, 3000);
+            }
+
+            return false;
+        }
+    </script>
+</body>
+</html>
